@@ -1,4 +1,5 @@
 var h = require('hyperscript')
+var SuggestBox = require('suggest-box')
 
 function copy (o) {
   var b = {}
@@ -11,8 +12,7 @@ exports.gives = {
   compose: {
     text: true,
     insert: true,
-    context: true,
-    suggest: true
+    context: true
   }
 }
 
@@ -24,10 +24,10 @@ exports.needs = {
     //insert is able to add to the textarea,
     //for example, inserting blobs, links, etc
     insert: 'map',
-    //suggest hooks into compose while typing i.e. "@user"
-    //brings up auto suggest for user names starting with "user"
-    suggest: 'map'
-  }
+  },
+  //suggest hooks into compose while typing i.e. "@user"
+  //brings up auto suggest for user names starting with "user"
+  suggest: 'first'
 }
 
 exports.create = function (api) {
@@ -35,7 +35,8 @@ exports.create = function (api) {
     compose: {
       text: function (meta, context, onSave) {
         var ta = h('textarea.compose__textarea')
-        api.compose.suggest(ta, meta, context)
+
+
         var button
         var container = h('div.compose',
           h('div.compose__context', api.compose.context(meta, context)),
@@ -60,15 +61,31 @@ exports.create = function (api) {
             })
           )
         )
+
+        SuggestBox(ta, function (word, cb) {
+          var fn = api.suggest(word)
+          if(!fn) return cb()
+          fn(word, cb)
+        })
+
         return container
       },
       //include default insert, compose, suggest
       insert: function () {},
       context: function () {},
-      suggest: function () {}
-    }
+    },
+    suggest: function () {}
   }
 }
+
+
+
+
+
+
+
+
+
 
 
 
