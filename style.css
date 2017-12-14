@@ -1,0 +1,9 @@
+
+.compose {
+  display: flex;
+  flex-direction: column;
+}
+
+.compose__textarea {
+  min-height: 200px;
+}
