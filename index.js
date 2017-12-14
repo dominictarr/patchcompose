@@ -1,5 +1,6 @@
 var h = require('hyperscript')
 var SuggestBox = require('suggest-box')
+var fs = require('fs')
 
 function copy (o) {
   var b = {}
@@ -24,6 +25,9 @@ exports.needs = {
     //insert is able to add to the textarea,
     //for example, inserting blobs, links, etc
     insert: 'map',
+
+    //possibly modify the content after writing.
+    post: 'reduce'
   },
   //suggest hooks into compose while typing i.e. "@user"
   //brings up auto suggest for user names starting with "user"
@@ -31,11 +35,13 @@ exports.needs = {
 }
 
 exports.create = function (api) {
+  document.head.appendChild(
+    h('style', {textContent: fs.readFileSync(__dirname+'/style.css')})
+  )
   return {
     compose: {
       text: function (meta, context, onSave) {
         var ta = h('textarea.compose__textarea')
-
 
         var button
         var container = h('div.compose',
@@ -47,6 +53,7 @@ exports.create = function (api) {
               onclick: function () {
                 var content = copy(meta)
                 content.text = ta.value
+                content = api.compose.post(content, context)
                 //have a confirm pop up,
                 //then call a write method (async) which calls back
                 //if successful (clear text area) or if error/cancel
@@ -77,15 +84,6 @@ exports.create = function (api) {
     suggest: function () {}
   }
 }
-
-
-
-
-
-
-
-
-
 
 
 
