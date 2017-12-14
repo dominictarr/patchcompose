@@ -13,7 +13,8 @@ exports.gives = {
   compose: {
     text: true,
     insert: true,
-    context: true
+    context: true,
+    post: true
   }
 }
 
@@ -80,10 +81,10 @@ exports.create = function (api) {
       //include default insert, compose, suggest
       insert: function () {},
       context: function () {},
+      post: function (content) { return content },
     },
     suggest: function () {}
   }
 }
-
 
 
