@@ -11,7 +11,14 @@
     "hyperscript": "^2.0.2",
     "suggest-box": "^2.2.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "brfs": "^1.4.3"
+  },
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
+  },
   "scripts": {
     "test": "set -e; for t in test/*.js; do node $t; done"
   },
