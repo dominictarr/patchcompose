@@ -32,7 +32,7 @@ exports.needs = {
   },
   //suggest hooks into compose while typing i.e. "@user"
   //brings up auto suggest for user names starting with "user"
-  suggest: 'first'
+  suggest: {compose: 'first'}
 }
 
 exports.create = function (api) {
@@ -71,7 +71,7 @@ exports.create = function (api) {
         )
 
         SuggestBox(ta, function (word, cb) {
-          var fn = api.suggest(word)
+          var fn = api.suggest.compose(word)
           if(!fn) return cb()
           fn(word, cb)
         })
@@ -86,5 +86,4 @@ exports.create = function (api) {
     suggest: function () {}
   }
 }
-
 
