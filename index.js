@@ -43,7 +43,7 @@ exports.create = function (api) {
     compose: {
       text: function (meta, context, onSave) {
         var ta = h('textarea.compose__textarea')
-
+        context = context || {}
         var button
         var container = h('div.compose',
           h('div.compose__context', api.compose.context(meta, context)),
